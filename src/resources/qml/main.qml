@@ -11,6 +11,8 @@ ApplicationWindow  {
     visibility: Window.FullScreen
     title: qsTr("Puzzle Neni")
 
+    property string imageName: "qrc:/images/japanPuzzle";
+
     menuBar: PuzzleMenuBar{}
 
     Dashboard {

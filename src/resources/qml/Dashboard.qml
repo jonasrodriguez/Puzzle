@@ -4,7 +4,7 @@ import com.jonas.puzzle 1.0
 Item {
     Image {
         id: name
-        source: "qrc:/japan"
+        source: gameWindow.imageName
 
         anchors.centerIn: parent
         height: parent.height * 0.95

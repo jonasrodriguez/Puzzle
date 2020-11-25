@@ -2,7 +2,9 @@
 #define PUZZLE_H
 
 #include <QObject>
+#include <memory>
 
+#include "image_manager.h"
 #include "types.h"
 
 class QQmlEngine;
@@ -19,11 +21,15 @@ class Puzzle : public QObject {
  signals:
   void puzzleChanged();
 
+ public slots:
+  void loadNewImage(QString file_name);
+
  private:
   int numberOfPieces_;
   float imageHeight_;
   float imageWidth_;
   std::vector<puz::piece> pieces_;
+  std::unique_ptr<image_manager> image_;
 
   static Puzzle *this_;
   explicit Puzzle(QObject *parent = nullptr);

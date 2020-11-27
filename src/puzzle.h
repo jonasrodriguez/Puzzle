@@ -29,8 +29,9 @@ class Puzzle : public QObject {
   float imageHeight_;
   float imageWidth_;
   std::vector<puz::piece> pieces_;
-  std::unique_ptr<image_manager> image_;
+  std::unique_ptr<ImageManager> image_;
 
+ private:
   static Puzzle *this_;
   explicit Puzzle(QObject *parent = nullptr);
 };

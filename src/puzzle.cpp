@@ -1,13 +1,12 @@
 #include "puzzle.h"
 
-#include <QDebug>
 #include <QJSEngine>
 #include <QQmlEngine>
 
 Puzzle *Puzzle::this_ = nullptr;
 
 Puzzle::Puzzle(QObject *parent) : QObject(parent) {
-  image_ = std::unique_ptr<image_manager>(new image_manager());
+  image_ = std::unique_ptr<ImageManager>(new ImageManager());
 }
 
 Puzzle *Puzzle::instance() {
@@ -23,7 +22,4 @@ QObject *Puzzle::qmlInstance(QQmlEngine *engine, QJSEngine *scriptEngine) {
   return Puzzle::instance();
 }
 
-void Puzzle::loadNewImage(QString file_name) {
-  qDebug() << "Loading image " + file_name;
-  image_->LoadImage(file_name);
-}
+void Puzzle::loadNewImage(QString file_name) { image_->LoadImage(file_name); }

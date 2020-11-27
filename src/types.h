@@ -1,6 +1,8 @@
 #ifndef TYPES_H
 #define TYPES_H
 
+#include <QImage>
+
 namespace puz {
 
 const int puzzle1000Height = 25;
@@ -23,9 +25,10 @@ struct piece {
   angle rotation;
 
   int idGroup;
+  QImage image;
 };
 
-struct group {
+struct cluster {
   int id;
 };
 
@@ -34,6 +37,6 @@ struct group {
 Q_DECLARE_METATYPE(puz::angle)
 Q_DECLARE_METATYPE(puz::location)
 Q_DECLARE_METATYPE(puz::piece)
-Q_DECLARE_METATYPE(puz::group)
+Q_DECLARE_METATYPE(puz::cluster)
 
 #endif  // TYPES_H

@@ -1,35 +1,30 @@
-#ifndef PUZZLE_IMAGE_H
-#define PUZZLE_IMAGE_H
+#ifndef IMAGE_MANAGER_H
+#define IMAGE_MANAGER_H
 
-#include <QAbstractListModel>
 #include <QImage>
+#include <QQuickImageProvider>
 
 #include "types.h"
 
-class ImageManager : public QAbstractListModel {
+class ImageManager : public QQuickImageProvider {
  public:
-  ImageManager(QObject *parent = nullptr);
+  ImageManager();
 
-  enum PieceRoles {
-    idRole = Qt::UserRole + 1,
-    posRole,
-    nameRole,
-    surnameRole,
-    emailRole,
-    dobRole
-  };
+  QImage requestImage(const QString &id, QSize *size,
+                      const QSize &requestedSize) override;
 
-  int rowCount(const QModelIndex &parent = QModelIndex()) const override;
-  QVariant data(const QModelIndex &index,
-                int role = Qt::DisplayRole) const override;
-  QHash<int, QByteArray> roleNames() const override;
+  bool LoadImage(const QString &image_name, const int &total_pieces,
+                 int &piece_height, int &piece_width);
 
-  bool LoadImage(const QString &);
+  QImage GetImageFromVector(const int &id);
 
  private:
-  QImage puzzle_image_;
-  QVector<puz::piece> pieces_;
-  QVector<puz::cluster> clusters_;
+  void LoadImageVector(const int &piece_height, const int &piece_width);
+  QImage CreateSubImage(QImage *image, const QRect &rect);
+
+ private:
+  QImage *puzzle_image_;
+  QVector<QImage> piece_images_;
 };
 
-#endif  // PUZZLE_IMAGE_H
+#endif  // IMAGE_MANAGER_H

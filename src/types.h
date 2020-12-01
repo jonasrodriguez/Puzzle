@@ -5,11 +5,13 @@
 
 namespace puz {
 
-const int puzzle1000Height = 25;
-const int puzzle1000Width = 40;
+const int puzzle1000Pieces = 1000;
+const int puzzle1000RowPieces = 25;
+const int puzzle1000ColumnPieces = 40;
 
-const int puzzle3000Height = 40;
-const int puzzle3000Width = 75;
+const int puzzle3000Pieces = 3000;
+const int puzzle3000RowPieces = 40;
+const int puzzle3000ColumnPieces = 75;
 
 enum location { general = 0, table1 = 1, table2 = 2 };
 enum angle { a0 = 0, a90, a180, a270 };

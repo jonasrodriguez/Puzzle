@@ -1,6 +1,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 
+#include "image_manager.h"
 #include "puzzle.h"
 
 int main(int argc, char *argv[]) {
@@ -12,6 +13,9 @@ int main(int argc, char *argv[]) {
   const QUrl url(QStringLiteral("qrc:/qml/main.qml"));
   qmlRegisterSingletonType<Puzzle>("com.jonas.puzzle", 1, 0, "Puzzle",
                                    &Puzzle::qmlInstance);
+  engine.addImageProvider("imageProvider",
+                          Puzzle::instance()->getImageProvider());
+
   QObject::connect(
       &engine, &QQmlApplicationEngine::objectCreated, &app,
       [url](QObject *obj, const QUrl &objUrl) {

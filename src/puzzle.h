@@ -12,11 +12,21 @@ class QJSEngine;
 
 class Puzzle : public QObject {
   Q_OBJECT
-  Q_PROPERTY(int numberOfPieces MEMBER numberOfPieces_ NOTIFY puzzleChanged)
+  Q_PROPERTY(bool loadingPuzzle MEMBER loading_puzzle_ NOTIFY puzzleChanged)
+  Q_PROPERTY(int piecesRow READ getPiecesXRow NOTIFY puzzleChanged)
+  Q_PROPERTY(int piecesColumn READ getPiecesXColumn NOTIFY puzzleChanged)
 
  public:
   static Puzzle *instance();
   static QObject *qmlInstance(QQmlEngine *engine, QJSEngine *scriptEngine);
+
+  ImageManager *getImageProvider();
+
+  Q_INVOKABLE QImage requestImage(const int &id);
+
+  int getPiecesXRow();
+  int getPiecesXColumn();
+  int getPieceSize();
 
  signals:
   void puzzleChanged();
@@ -25,11 +35,10 @@ class Puzzle : public QObject {
   void loadNewImage(QString file_name);
 
  private:
+  bool loading_puzzle_;
   int numberOfPieces_;
-  float imageHeight_;
-  float imageWidth_;
   std::vector<puz::piece> pieces_;
-  std::unique_ptr<ImageManager> image_;
+  std::unique_ptr<ImageManager> image_manager_;
 
  private:
   static Puzzle *this_;

@@ -3,43 +3,64 @@
 #include <QDebug>
 #include <QFile>
 
-ImageManager::ImageManager(QObject *parent) : QAbstractListModel(parent) {}
+ImageManager::ImageManager()
+    : QQuickImageProvider(QQuickImageProvider::Image) {}
 
-bool ImageManager::LoadImage(const QString &imageName) {
-  puzzle_image_ = QImage(imageName);
-  return !puzzle_image_.isNull();
+QImage ImageManager::GetImageFromVector(const int &id) {
+  return piece_images_.at(id);
 }
 
-int ImageManager::rowCount(const QModelIndex &) const { return pieces_.size(); }
+QImage ImageManager::requestImage(const QString &id, QSize *size,
+                                  const QSize &requestedSize) {
+  (void)size;
+  (void)requestedSize;
+  return piece_images_.at(id.toInt());
+}
 
-QVariant ImageManager::data(const QModelIndex &index, int role) const {
-  if (!index.isValid()) {
-    return QVariant();
+bool ImageManager::LoadImage(const QString &image_name, const int &total_pieces,
+                             int &piece_height, int &piece_width) {
+  /// TODO - Use parameter image name
+  (void)image_name;
+  puzzle_image_ = new QImage(":/images/japanPuzzle");
+  if (puzzle_image_->isNull()) {
+    return false;
   }
 
-  if (index.row() < 0) {
-    return QVariant();
-  }
-
-  switch (role) {
-    case PieceRoles::posRole:
-      return 1;
-    case PieceRoles::idRole:
-      return 2;
+  // Add size values to piece vector
+  switch (total_pieces) {
+    case puz::puzzle1000Pieces:
+      piece_width = puzzle_image_->width() / puz::puzzle1000ColumnPieces;
+      piece_height = puzzle_image_->height() / puz::puzzle1000RowPieces;
+      break;
+    case puz::puzzle3000Pieces:
+      piece_width = puzzle_image_->width() / puz::puzzle3000ColumnPieces;
+      piece_height = puzzle_image_->height() / puz::puzzle3000RowPieces;
+      break;
     default:
-      return QVariant();
+      return false;
+  }
+
+  // Split image and load pieces on vector
+  LoadImageVector(piece_height, piece_width);
+
+  return true;
+}
+
+void ImageManager::LoadImageVector(const int &piece_height,
+                                   const int &piece_width) {
+  QRect rect;
+  for (int y = 0; y < puz::puzzle3000RowPieces; y++) {
+    for (int x = 0; x < puz::puzzle3000ColumnPieces; x++) {
+      rect =
+          QRect(x * piece_width, y * piece_height, piece_width, piece_height);
+      piece_images_.push_back(CreateSubImage(puzzle_image_, rect));
+    }
   }
 }
 
-QHash<int, QByteArray> ImageManager::roleNames() const {
-  QHash<int, QByteArray> roles;
-
-  roles[idRole] = "id";
-  roles[posRole] = "pos";
-  roles[nameRole] = "name";
-  roles[surnameRole] = "surname";
-  roles[emailRole] = "email";
-  roles[dobRole] = "dob";
-
-  return roles;
+QImage ImageManager::CreateSubImage(QImage *image, const QRect &rect) {
+  size_t offset =
+      rect.x() * image->depth() / 8 + rect.y() * image->bytesPerLine();
+  return QImage(image->bits() + offset, rect.width(), rect.height(),
+                image->bytesPerLine(), image->format());
 }

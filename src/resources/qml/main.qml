@@ -17,6 +17,5 @@ ApplicationWindow  {
 
     Dashboard {
         id: dashboard
-        anchors.fill: parent
     }
 }

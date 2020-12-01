@@ -37,7 +37,6 @@ class Puzzle : public QObject {
  private:
   bool loading_puzzle_;
   int numberOfPieces_;
-  std::vector<puz::piece> pieces_;
   std::unique_ptr<ImageManager> image_manager_;
 
  private:

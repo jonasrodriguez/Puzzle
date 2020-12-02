@@ -6,7 +6,8 @@
 Puzzle *Puzzle::this_ = nullptr;
 
 Puzzle::Puzzle(QObject *parent) : QObject(parent), loading_puzzle_(false) {
-  image_manager_ = std::unique_ptr<ImageManager>(new ImageManager());
+  piece_manager_ = std::unique_ptr<PieceManager>(new PieceManager);
+  image_manager_ = std::unique_ptr<ImageManager>(new ImageManager);
 }
 
 Puzzle *Puzzle::instance() {
@@ -23,22 +24,24 @@ QObject *Puzzle::qmlInstance(QQmlEngine *engine, QJSEngine *scriptEngine) {
 }
 
 ImageManager *Puzzle::getImageProvider() { return image_manager_.get(); }
-
-int Puzzle::getPiecesXRow() { return puz::puzzle3000RowPieces; }
-int Puzzle::getPiecesXColumn() { return puz::puzzle3000ColumnPieces; }
+PieceManager *Puzzle::getPieceManager() { return piece_manager_.get(); }
 
 QImage Puzzle::requestImage(const int &id) {
   return image_manager_->GetImageFromVector(id);
 }
 
 void Puzzle::loadNewImage(QString file_name) {
-  int piece_height = 0;
-  int piece_width = 0;
-  if (!image_manager_->LoadImage(file_name, puz::puzzle3000Pieces, piece_height,
-                                 piece_width)) {
-    qDebug() << "Error loading the image";
-    return;
-  }
+  //  int piece_height = 0;
+  //  int piece_width = 0;
+  //  if (!image_manager_->LoadImage(file_name, puz::puzzle3000Pieces,
+  //  piece_height,
+  //                                 piece_width)) {
+  //    qDebug() << "Error loading the image";
+  //    return;
+  //  }
+
+  (void)file_name;
+  piece_manager_->LoadPieceValues(puz::testPuzzle);
 
   loading_puzzle_ = true;
   emit puzzleChanged();

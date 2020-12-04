@@ -1,9 +1,54 @@
 #include "piece_manager.h"
 
+#include <QDebug>
+
 #include "types.h"
 
 PieceManager::PieceManager(QObject *parent)
-    : QObject(parent), total_pieces_(0), image_width_(0), image_height_(0) {}
+    : QAbstractListModel(parent),
+      total_pieces_(0),
+      image_width_(0),
+      image_height_(0) {}
+
+QHash<int, QByteArray> PieceManager::roleNames() const {
+  QHash<int, QByteArray> roles;
+
+  roles[posXRole] = "posX";
+  roles[posYRole] = "posY";
+  roles[rotationRole] = "rotation";
+
+  return roles;
+}
+
+int PieceManager::rowCount(const QModelIndex & /* parent */) const {
+  return pieces_.size();
+}
+
+QVariant PieceManager::data(const QModelIndex &index, int role) const {
+  if (!index.isValid()) return QVariant();
+
+  if (index.row() >= pieces_.size() || index.row() < 0) return QVariant();
+
+  switch (role) {
+    case PiecesRoles::posXRole: {
+      float posX = pieces_.at(index.row()).row * image_width_;
+      return posX;
+    }
+    case PiecesRoles::posYRole: {
+      float posY = pieces_.at(index.row()).column * image_height_;
+      return posY;
+    }
+    case PiecesRoles::rotationRole:
+      return pieces_.at(index.row()).rotation;
+    default:
+      return QVariant();
+  }
+}
+
+void PieceManager::setImageRealSize(const float &heigt, const float &width) {
+  piece_width_ = width / num_columns_;
+  piece_height_ = heigt / num_rows_;
+}
 
 void PieceManager::LoadPieceValues(const int &total_pieces) {
   total_pieces_ = total_pieces;
@@ -21,7 +66,13 @@ void PieceManager::FillPieceVector() {
     piece.id = index;
     piece.rotation = puz::a0;
     piece.id_cluster = -1;
+    piece.row = (int)(index / num_rows_);
+    piece.column = index % num_rows_;
     FindNeighbours(index, piece);
+
+    beginInsertRows(QModelIndex(), pieces_.size(), pieces_.size() + 1);
+    pieces_.push_back(piece);
+    endInsertRows();
   }
 }
 

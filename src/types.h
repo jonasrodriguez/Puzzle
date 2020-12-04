@@ -34,6 +34,9 @@ struct piece {
   int position_x;
   int position_y;
 
+  int row;
+  int column;
+
   int id_left;
   int id_top;
   int id_right;

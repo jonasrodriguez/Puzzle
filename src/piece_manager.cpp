@@ -5,16 +5,15 @@
 #include "types.h"
 
 PieceManager::PieceManager(QObject *parent)
-    : QAbstractListModel(parent),
-      total_pieces_(0),
-      image_width_(0),
-      image_height_(0) {}
+    : QAbstractListModel(parent), total_pieces_(0) {}
 
 QHash<int, QByteArray> PieceManager::roleNames() const {
   QHash<int, QByteArray> roles;
 
   roles[posXRole] = "posX";
   roles[posYRole] = "posY";
+  roles[rowRole] = "row";
+  roles[columnRole] = "column";
   roles[rotationRole] = "rotation";
 
   return roles;
@@ -30,24 +29,25 @@ QVariant PieceManager::data(const QModelIndex &index, int role) const {
   if (index.row() >= pieces_.size() || index.row() < 0) return QVariant();
 
   switch (role) {
-    case PiecesRoles::posXRole: {
-      float posX = pieces_.at(index.row()).row * image_width_;
+    case PiecesRoles::posXRole: {  /// TODO - Delete
+      float posX = pieces_.at(index.row()).row;
       return posX;
     }
-    case PiecesRoles::posYRole: {
-      float posY = pieces_.at(index.row()).column * image_height_;
+    case PiecesRoles::posYRole: {  /// TODO - Delete
+      float posY = pieces_.at(index.row()).column;
       return posY;
+    }
+    case PiecesRoles::rowRole: {
+      return pieces_.at(index.row()).row;
+    }
+    case PiecesRoles::columnRole: {
+      return pieces_.at(index.row()).column;
     }
     case PiecesRoles::rotationRole:
       return pieces_.at(index.row()).rotation;
     default:
       return QVariant();
   }
-}
-
-void PieceManager::setImageRealSize(const float &heigt, const float &width) {
-  piece_width_ = width / num_columns_;
-  piece_height_ = heigt / num_rows_;
 }
 
 void PieceManager::LoadPieceValues(const int &total_pieces) {
@@ -105,9 +105,6 @@ void PieceManager::FindNeighbours(const int &index, puz::piece &piece) {
 void PieceManager::CalculatePieceSize(const QString &image_path) {
   QImage puzzle(image_path);
 
-  image_width_ = puzzle.width();
-  image_height_ = puzzle.height();
-
   switch (total_pieces_) {
     case puz::puzzle1000Pieces:
       num_rows_ = puz::puzzle1000RowPieces;
@@ -124,7 +121,4 @@ void PieceManager::CalculatePieceSize(const QString &image_path) {
     default:
       return;
   }
-
-  piece_width_ = image_width_ / num_columns_;
-  piece_height_ = image_height_ / num_rows_;
 }

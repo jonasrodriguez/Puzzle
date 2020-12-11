@@ -2,14 +2,13 @@ import QtQuick 2.0
 import com.jonas.puzzle 1.0
 
 Rectangle {
+    id: dashboard
+
     anchors.centerIn: parent
     height: gameWindow.height
     width: gameWindow.width * 0.95
 
     color: "transparent"
-//    border.width: 2
-
-    Component.onCompleted: Puzzle.pieces.setImageRealSize(height, width)
 
     Loader {
         anchors.fill: parent
@@ -26,14 +25,7 @@ Rectangle {
             border.width: 2
             Repeater {
                 model: Puzzle.pieces
-                Rectangle {
-                    x: posX
-                    y: posY
-                    width: dashboard.width / Puzzle.pieces.numColumns
-                    height: dashboard.height / Puzzle.pieces.numRows
-                    color: (index % 2) ? "red" : "yellow"
-                    Component.onCompleted: console.log(index+" "+x+" "+y)
-                }
+                Piece {}
             }
         }
     }

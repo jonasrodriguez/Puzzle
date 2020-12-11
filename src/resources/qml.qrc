@@ -4,5 +4,6 @@
         <file>qml/PuzzleMenuBar.qml</file>
         <file>qml/Dashboard.qml</file>
         <file>images/japanPuzzle</file>
+        <file>qml/Piece.qml</file>
     </qresource>
 </RCC>

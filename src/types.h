@@ -20,14 +20,6 @@ const int puzzle3000ColumnPieces = 75;
 enum location { general = 0, table1 = 1, table2 = 2 };
 enum angle { a0 = 0, a90, a180, a270 };
 
-struct puzzleSizes {
-  int total_piece;
-  int num_row_pieces;
-  int num_column_pieces;
-  float piece_width;
-  float piece_height;
-};
-
 struct piece {
   int id;
 
@@ -53,7 +45,6 @@ struct cluster {
 
 }  // namespace puz
 
-Q_DECLARE_METATYPE(puz::puzzleSizes)
 Q_DECLARE_METATYPE(puz::angle)
 Q_DECLARE_METATYPE(puz::location)
 Q_DECLARE_METATYPE(puz::piece)

@@ -31,7 +31,5 @@ ApplicationWindow  {
         }
     }
 
-    Dashboard {
-        id: dashboard
-    }
+    Dashboard {}
 }

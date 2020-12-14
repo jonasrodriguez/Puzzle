@@ -41,7 +41,7 @@ void Puzzle::loadNewImage(QString file_name) {
   //  }
 
   (void)file_name;
-  piece_manager_->LoadPieceValues(puz::testPuzzle);
+  piece_manager_->LoadPieceValues(puz::puzzle1000Pieces);
 
   loading_puzzle_ = true;
   emit puzzleChanged();

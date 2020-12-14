@@ -50,13 +50,34 @@ QVariant PieceManager::data(const QModelIndex &index, int role) const {
   }
 }
 
+void PieceManager::startPuzzle() { qDebug() << "Clicky!"; }
+
 void PieceManager::LoadPieceValues(const int &total_pieces) {
   total_pieces_ = total_pieces;
 
-  CalculatePieceSize(":/images/japanPuzzle");
+  CalculatePieceSize();
   FillPieceVector();
 
   emit piecesChanged();
+}
+
+void PieceManager::CalculatePieceSize() {
+  switch (total_pieces_) {
+    case puz::puzzle1000Pieces:
+      num_rows_ = puz::puzzle1000RowPieces;
+      num_columns_ = puz::puzzle1000ColumnPieces;
+      break;
+    case puz::puzzle3000Pieces:
+      num_rows_ = puz::puzzle3000RowPieces;
+      num_columns_ = puz::puzzle3000ColumnPieces;
+      break;
+    case puz::testPuzzle:  // Test only
+      num_rows_ = puz::testRowPieces;
+      num_columns_ = puz::testColumnPieces;
+      break;
+    default:
+      return;
+  }
 }
 
 void PieceManager::FillPieceVector() {
@@ -99,26 +120,5 @@ void PieceManager::FindNeighbours(const int &index, puz::piece &piece) {
     piece.id_bottom = -1;
   } else {
     piece.id_bottom = index + num_rows_;
-  }
-}
-
-void PieceManager::CalculatePieceSize(const QString &image_path) {
-  QImage puzzle(image_path);
-
-  switch (total_pieces_) {
-    case puz::puzzle1000Pieces:
-      num_rows_ = puz::puzzle1000RowPieces;
-      num_columns_ = puz::puzzle1000ColumnPieces;
-      break;
-    case puz::puzzle3000Pieces:
-      num_rows_ = puz::puzzle3000RowPieces;
-      num_columns_ = puz::puzzle3000ColumnPieces;
-      break;
-    case puz::testPuzzle:  // Test only
-      num_rows_ = puz::testRowPieces;
-      num_columns_ = puz::testColumnPieces;
-      break;
-    default:
-      return;
   }
 }

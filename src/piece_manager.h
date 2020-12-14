@@ -37,8 +37,11 @@ class PieceManager : public QAbstractListModel {
  signals:
   void piecesChanged();
 
+ public slots:
+  void startPuzzle();
+
  private:
-  void CalculatePieceSize(const QString &image_path);
+  void CalculatePieceSize();
   void FillPieceVector();
   void FindNeighbours(const int &index, puz::piece &piece);
 
@@ -46,6 +49,7 @@ class PieceManager : public QAbstractListModel {
   int total_pieces_;
   int num_rows_;
   int num_columns_;
+  bool game_started_;
   QVector<puz::piece> pieces_;
 };
 

@@ -5,5 +5,6 @@
         <file>qml/Dashboard.qml</file>
         <file>images/japanPuzzle</file>
         <file>qml/Piece.qml</file>
+        <file>qml/PieceBorders.qml</file>
     </qresource>
 </RCC>

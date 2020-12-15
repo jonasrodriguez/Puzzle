@@ -1,6 +1,7 @@
 #include "piece_manager.h"
 
 #include <QDebug>
+#include <random>
 
 #include "types.h"
 
@@ -50,7 +51,41 @@ QVariant PieceManager::data(const QModelIndex &index, int role) const {
   }
 }
 
-void PieceManager::startPuzzle() { qDebug() << "Clicky!"; }
+void PieceManager::startPuzzle(const int &height, const int &width) {
+  std::random_device rd;   // obtain a random number from hardware
+  std::mt19937 gen(rd());  // seed the generator
+  // define the height range
+  std::uniform_int_distribution<> dist_height(0, height);
+  // define the height range
+  std::uniform_int_distribution<> dist_width(0, width);
+  // define rotation range (4 * 90º possible possitions)
+  std::uniform_int_distribution<> dist_rota(0, 3);
+
+  // Randomize all pieces position and rotation
+  for (int i = 0; i < total_pieces_; i++) {
+    emit randomizePieces(i, dist_height(gen), dist_width(gen), dist_rota(gen));
+  }
+}
+
+void PieceManager::pressedPiece(const int &id) {
+  qDebug() << "pressedPiece";
+
+  for (auto p : pieces_) {
+    if (p.id_left == id) {
+      qDebug() << "Vecino Derecho: " << p.id;
+    }
+    if (p.id_right == id) {
+      qDebug() << "Vecino Izquierdo: " << p.id;
+    }
+    if (p.id_top == id) {
+      qDebug() << "Vecino Abajo: " << p.id;
+    }
+    if (p.id_bottom == id) {
+      qDebug() << "Vecino Arriba: " << p.id;
+    }
+  }
+}
+void PieceManager::releasedPiece() {}
 
 void PieceManager::LoadPieceValues(const int &total_pieces) {
   total_pieces_ = total_pieces;

@@ -10,7 +10,7 @@ Rectangle {
     height: gameWindow.height
     width: gameWindow.width * 0.95
 
-    color: "transparent"
+    color: "lightgrey"
 
     Loader {
         id: pieceLoader
@@ -60,7 +60,7 @@ Rectangle {
             anchors.fill: parent
             onClicked: {
                 dashboard.gameStarted = false;
-                Puzzle.pieces.startPuzzle();
+                Puzzle.pieces.startPuzzle(dashboard.height, dashboard.width);
             }
         }
     }

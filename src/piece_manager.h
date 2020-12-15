@@ -36,9 +36,13 @@ class PieceManager : public QAbstractListModel {
 
  signals:
   void piecesChanged();
+  void randomizePieces(const int &id, const int &x, const int &y,
+                       const int &rot);
 
  public slots:
-  void startPuzzle();
+  void startPuzzle(const int &height, const int &width);
+  void pressedPiece(const int &id);
+  void releasedPiece();
 
  private:
   void CalculatePieceSize();
